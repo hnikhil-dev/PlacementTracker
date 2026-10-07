@@ -162,8 +162,8 @@ async function loadJobs() {
             authenticatedFetch(`/internships`)
         ]);
 
-        const appsData = await appsRes.json();
-        const jobsData = await jobsRes.json();
+        const appsData = await safeJson(appsRes, []);
+        const jobsData = await safeJson(jobsRes, []);
 
         const myApps = Array.isArray(appsData) ? appsData : (appsData.data || []);
         allOpportunities = Array.isArray(jobsData) ? jobsData : (jobsData.data || []);
@@ -429,7 +429,7 @@ async function applyJob(jobId) {
             method: 'POST',
             body: JSON.stringify({ company_id: jobId })
         });
-        const data = await res.json();
+        const data = await safeJson(res);
 
         if (res.ok) {
             showToast('Application submitted successfully!', 'success');
@@ -502,7 +502,7 @@ async function loadApplications() {
 
     try {
         const res = await authenticatedFetch(`/applications/my`);
-        const responseData = await res.json();
+        const responseData = await safeJson(res, []);
         const apps = Array.isArray(responseData) ? responseData : (responseData.data || []);
 
         if (apps.length === 0) {
@@ -574,7 +574,7 @@ async function loadDashboardStats() {
     try {
         const res = await authenticatedFetch(`/stats/dashboard`);
         if (!res.ok) return;
-        const { data } = await res.json();
+        const { data } = await safeJson(res);
 
         animateCounter(document.getElementById('statApplied'), data.total || 0);
         animateCounter(document.getElementById('statShortlisted'), data.shortlisted || 0);
@@ -615,7 +615,7 @@ async function loadProfile() {
     try {
         const res = await authenticatedFetch(`/profile/me`);
         if (res.ok) {
-            const json = await res.json();
+            const json = await safeJson(res);
             const data = json.data || json;
             // Deep merge — server is source of truth for skills
             currentUser = {
@@ -693,7 +693,7 @@ async function uploadResume() {
             method: 'POST',
             body: formData
         });
-        const data = await res.json();
+        const data = await safeJson(res);
 
         if (res.ok) {
             currentUser.skills = data.skills_identified;
@@ -743,7 +743,7 @@ async function startVerification(skill) {
     try {
         const histRes = await authenticatedFetch(`/skills/history`);
         if (histRes.ok) {
-            const histData = await histRes.json();
+            const histData = await safeJson(histRes);
             const attempts = Array.isArray(histData.data) ? histData.data : [];
             const now = Date.now();
             const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
@@ -785,7 +785,7 @@ async function startVerification(skill) {
             method: 'POST',
             body: JSON.stringify({ skill })
         });
-        const data = await res.json();
+        const data = await safeJson(res);
 
         if (data.quiz && data.quiz.length > 0) {
             currentQuizData = data.quiz;
@@ -943,7 +943,7 @@ async function fetchAIFeedback(skill, score, total) {
             method: 'POST',
             body: JSON.stringify({ skill, score, total })
         });
-        const data = await res.json();
+        const data = await safeJson(res);
         if (data.feedback) {
             text.innerText = data.feedback;
         } else {
@@ -962,7 +962,7 @@ async function saveVerification(score, passed) {
     });
 
     if (passed) {
-        const data = await response.json();
+        const data = await safeJson(response);
 
         if (!currentUser.verified_skills) currentUser.verified_skills = [];
         if (!currentUser.verified_skills.some(v => v.toLowerCase() === skill.toLowerCase())) {
@@ -1080,7 +1080,7 @@ async function runSkillGap() {
                 requiredSkills: job.required_skills || []
             })
         });
-        const data = await res.json();
+        const data = await safeJson(res);
 
         if (data.gapSkills?.length === 0) {
             resultDiv.innerHTML = `
@@ -1111,15 +1111,28 @@ async function runSkillGap() {
                 ${weeks.length > 0 ? `
                 <div style="display:grid;gap:10px;">
                     ${weeks.map(w => {
-            const rawUrl = (w.resource || '').trim();
-            const safeUrl = rawUrl ? (rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`) : '';
+            const rawResource = (w.resource || '').trim();
+            // Check if the resource is a real URL (starts with http:// or https://)
+            const isRealUrl = /^https?:\/\//i.test(rawResource);
+            let linkUrl = '';
+            let linkLabel = '';
+            if (rawResource) {
+                if (isRealUrl) {
+                    linkUrl = rawResource;
+                    linkLabel = rawResource.length > 60 ? rawResource.substring(0, 57) + '...' : rawResource;
+                } else {
+                    // It's plain text like "Search SQLite tutorial on YouTube" — create a Google search link
+                    linkUrl = 'https://www.google.com/search?q=' + encodeURIComponent(rawResource);
+                    linkLabel = rawResource;
+                }
+            }
             return `
                         <div style="background:white;border-radius:10px;padding:14px;border:1px solid #e2e8f0;display:flex;gap:12px;align-items:flex-start;">
                             <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:8px;padding:6px 12px;font-weight:700;font-size:0.85rem;white-space:nowrap;">Wk ${w.week}</div>
                             <div>
                                 <p style="font-weight:600;color:#1e293b;margin-bottom:3px;">${escapeHtml(w.focus || '')}</p>
                                 <p style="color:#64748b;font-size:0.85rem;margin-bottom:4px;">${escapeHtml(w.goal || '')}</p>
-                                ${safeUrl ? `<a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-size:0.8rem;font-weight:500;"><i class="fas fa-external-link-alt"></i> ${escapeHtml(rawUrl)}</a>` : ''}
+                                ${linkUrl ? `<a href="${escapeHtml(linkUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-size:0.8rem;font-weight:500;"><i class="fas fa-external-link-alt"></i> ${escapeHtml(linkLabel)}</a>` : ''}
                             </div>
                         </div>`;
         }).join('')}
@@ -1144,7 +1157,7 @@ async function downloadProfile() {
     let stats = { total: 0, shortlisted: 0, offered: 0, rejected: 0, verifiedSkills: 0, profileScore: 0 };
     try {
         const r = await fetch(`${API_BASE_URL}/stats/dashboard`, { headers: { 'Authorization': `Bearer ${token}` } });
-        if (r.ok) { const d = await r.json(); stats = d.data || stats; }
+        if (r.ok) { const d = await safeJson(r); stats = d.data || stats; }
     } catch (_) { }
 
     const u = currentUser;

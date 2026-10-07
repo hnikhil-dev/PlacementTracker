@@ -1,627 +1,154 @@
-# Smart Student Placement Manager
+# Smart Student Placement Manager (AI-Powered)
+### Python FastAPI & Supabase Enterprise Edition
 
-[![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-5.x-blue.svg)](https://expressjs.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-blue.svg)](https://supabase.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-success.svg)]()
+An enterprise-grade, AI-powered placement and internship tracker platform. The application is built with a high-performance **Python FastAPI** backend, connects to a **Supabase PostgreSQL** database, utilizes **Supabase Storage** for PDF resume uploads, and integrates with **Google Gemini AI** for automated skill badging and personalized 30-day learning curricula.
 
-> An AI-powered platform connecting students with their dream careers through intelligent resume parsing and automated Internship/Job matching.
+The frontend is a premium, responsive **Glassmorphism UI** served directly by the FastAPI web server.
+
+> 💡 **First time setting up? Cloning from GitHub?**  
+> Check out the complete step-by-step beginner guide: **[SETUP_GUIDE.md](SETUP_GUIDE.md)** for 3-minute Supabase setup and 1-click Windows launch instructions!
 
 ---
 
 ## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Database Setup](#database-setup)
-- [Running the Application](#running-the-application)
-- [Troubleshooting](#troubleshooting)
-- [Project Structure](#project-structure)
-- [Technical Documentation](#technical-documentation)
+1. [System Architecture](#system-architecture)
+2. [Technology Stack](#technology-stack)
+3. [Environment Configuration](#environment-configuration)
+4. [Automatic Database Initialization](#automatic-database-initialization)
+5. [Running the Application Locally](#running-the-application-locally)
+6. [Deployment to Production](#deployment-to-production)
+7. [Project Structure](#project-structure)
+8. [Default Credentials](#default-credentials)
 
 ---
 
-## Overview
+## System Architecture
 
-The Smart Student Placement Manager is an enterprise-grade web application designed to streamline the campus recruitment process. It serves as a comprehensive platform for:
-
-- **Students**: Resume management, Internship/Job discovery, and application tracking
-- **Placement Officers**: Internship/Job posting, applicant management, and candidate evaluation
-- **AI Integration**: Automated skill extraction from resumes using advanced parsing algorithms
-
-### Key Capabilities
-
-- **AI-Powered Student Rankings**: Admins can view a dynamic ranking of students based on a composite score calculated from their skills, application success, and profile completeness.
-- **Premium Glassmorphism UI**: A complete visual overhaul featuring a modern, premium design with glass-morphism effects, gradients, and smooth animations for an enhanced user experience.
-- Automated resume parsing with AI-powered skill extraction
-- Real-time application status tracking
-- Intelligent Internship/Job matching based on candidate skills
-- Secure authentication with JWT tokens
-- Cloud-based resume storage with Supabase
-- Role-based access control for students and administrators
-
----
-
-## Features
-
-### For Students
-
-- **Secure Authentication**: Create accounts and log in with encrypted credentials.
-- **AI Resume Parser**: Upload PDF resumes for automatic skill extraction using advanced parsing algorithms.
-- **Internship/Job Discovery**: Browse comprehensive listings with salary ranges, requirements, and company details.
-- **One-Click Applications**: Apply to positions instantly with pre-filled profile information.
-- **Real-Time Tracking**: Monitor application status (Applied, Shortlisted, Rejected) with live updates.
-
-### For Placement Officers (Admin)
-
-- **Internship/Job Management**: Post new opportunities with detailed requirements and deadlines.
-- **Applicant Dashboard**: View organized lists of candidates for each position.
-- **Candidate Evaluation**: Shortlist or reject applicants with streamlined decision workflows.
-- **Student Ranking Dashboard**: Access a sophisticated ranking system to identify top-performing students based on a multi-faceted scoring algorithm.
-- **Resume Access**: Instant access to candidate resumes and verified skill profiles.
+The application is structured as a single, cohesive deployment:
+*   **Python FastAPI Backend (`backend/`)**: Exposes clean, JWT-secured REST APIs under `/api/*`, provides interactive Swagger UI at `/docs`, and serves static web pages and assets (`public/`).
+*   **Static Glassmorphism Frontend (`public/`)**: Modern UI featuring responsive views for students (`dashboard.html`), placement officers (`admin.html`), registration, login, and password recovery.
+*   **Database (Supabase PostgreSQL)**: Relational data model mapping students, internships, applications, and skill quizzes using native UUID primary/foreign keys.
+*   **Storage (Supabase Storage)**: A dedicated `resumes` bucket safely storing student resume PDFs with secure direct links.
+*   **AI (Google Gemini)**: Generates dynamic skill-verification multiple-choice quizzes and tailored 30-day learning roadmaps (with YouTube and tutorial references) based on skill gap analysis. Includes an offline fallback question engine for 15+ technologies.
+*   **Resume Parser**: Automated PDF text extraction (`pypdf`) and regex skill matcher cross-referenced against the master skills catalog.
 
 ---
 
 ## Technology Stack
 
-### Frontend
-
-- **HTML5/CSS3**: Modern, responsive design with a premium Glassmorphism UI.
-- **JavaScript (ES6+)**: Client-side interactivity and dynamic content.
-- **Fetch API**: Asynchronous HTTP requests.
-
-### Backend
-
-- **Node.js**: JavaScript runtime environment.
-- **Express.js**: Web application framework.
-- **JWT**: JSON Web Tokens for secure authentication.
-- **Bcrypt**: Password hashing and encryption.
-
-### Database & Storage
-
-- **PostgreSQL**: Relational database via Supabase.
-- **Supabase Storage**: Cloud-based file storage for resumes.
-
-### AI & Parsing
-
-- **pdf2json**: PDF text extraction.
-- **Google Gemini AI**: Advanced AI features (optional).
-
-### Security
-
-- **Helmet.js**: Security headers.
-- **Express Rate Limit**: DDoS protection.
-- **HPP**: HTTP Parameter Pollution prevention.
-- **CORS**: Cross-Origin Resource Sharing.
+*   **Backend**: Python 3.9+, FastAPI, Uvicorn (ASGI server), Pydantic v2
+*   **Database**: PostgreSQL / Supabase, `psycopg2` threaded connection pooling
+*   **Security**: Stateless JWT (`python-jose`), BCrypt password hashing (10 salt rounds)
+*   **Frontend**: HTML5, CSS3 (Glassmorphism design system), Vanilla ES6 JavaScript (Fetch API client)
+*   **AI Integration**: Google Gemini AI (Pro & Flash models) with offline local MCQ question banks
+*   **PDF Extraction**: `pypdf` for fast, lightweight in-memory PDF parsing and skill detection
+*   **Documentation Generator**: ReportLab 5.0 for dynamic enterprise PDF reports
 
 ---
 
-## Installation
+## Environment Configuration
 
-1.  **Clone the repository:**
-
-    ```bash
-    git clone https://github.com/your-username/placement-tracker.git
-    cd placement-tracker
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-
----
-
-## Configuration
-
-The application requires a `.env` file in the root directory for configuration. Create this file and add the following environment variables.
+Create a `.env` file in the root folder of the project (or copy `.env.example`). The backend automatically parses these settings at startup:
 
 ```env
-# Server Configuration
+# Server Port (Default: 3000 or 8080)
 PORT=3000
-NODE_ENV=development
 
-# JWT Configuration
-JWT_SECRET=your_jwt_secret_key_here
-JWT_EXPIRES_IN=90d
+# Database Connection (Supabase PostgreSQL)
+DATABASE_URL="postgresql://postgres.your_project_ref:your_password@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
 
-# Database (Supabase PostgreSQL)
-# Get this from your Supabase project settings > Database > Connection string
-DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.xxxxxxxx.supabase.co:5432/postgres"
+# Supabase Storage & Key Credentials
+SUPABASE_URL="https://your_project_ref.supabase.co"
+SUPABASE_KEY="your_supabase_service_role_key"
+SUPABASE_BUCKET="resumes"
 
-# Supabase Storage
-# Get these from your Supabase project settings > API
-SUPABASE_URL="https://xxxxxxxx.supabase.co"
-# IMPORTANT: Use the 'service_role' key for backend operations
-SUPABASE_SERVICE_ROLE_KEY="your_supabase_service_role_key"
+# Security (JWT Signature Secret - min 32 characters)
+JWT_SECRET="f0141710-2155-479a-8864-7989e837b9e4"
 
-# Email Configuration (Optional, for password reset)
-EMAIL_HOST=smtp.example.com
-EMAIL_PORT=587
-EMAIL_USERNAME=your_email_username
-EMAIL_PASSWORD=your_email_password
-EMAIL_FROM="Your App <noreply@example.com>"
+# Google Gemini AI Key (from Google AI Studio)
+GEMINI_API_KEY="your_gemini_api_key_here"
+
+# Email Configuration (SMTP for Password Recovery)
+EMAIL_USER="your_email@gmail.com"
+EMAIL_PASS="your_smtp_app_password"
 ```
 
-### Important Notes:
+---
 
-- **`SUPABASE_SERVICE_ROLE_KEY`**: For backend operations that require elevated privileges (like uploading files), you **must** use the `service_role` key, not the `anon` key.
-- **Supabase Bucket**: Ensure you have a Supabase Storage bucket created. The application will first try to upload resumes to a bucket named `resumes`, and if that fails, it will try `resume`. It is recommended to create a bucket named `resumes` with public access for simplicity.
+## Automatic Database Initialization
+
+The backend features **Automatic Self-Bootstrapping**:
+1. When you start the application with a fresh Supabase database, it automatically executes `supabase_setup.sql` to create all required tables (`users`, `skills`, `internships`, `applications`, `quiz_attempts`), constraints, and indexes.
+2. It seeds the master catalog of 160+ industry skills.
+3. If no administrator exists, it automatically provisions the default administrator account.
+4. If no internships are found, it seeds initial job postings from Google, Microsoft, Amazon, Meta, and TCS.
 
 ---
 
-## Database Setup
+## Running the Application Locally
 
-The application uses a PostgreSQL database hosted on Supabase. The necessary tables will be created automatically if they don't exist when the server starts.
+### Method A: Super-Smart One-Click Runner (Windows)
+Double-click `run.bat` in the root folder.
+* Automatically verifies if Python is installed (downloads & installs it silently if missing).
+* Automatically creates a clean `.venv` virtual environment.
+* Automatically installs all dependencies (`pip install -r backend/requirements.txt`).
+* Automatically verifies database tables and master seed data.
+* Automatically opens your default web browser to `http://localhost:3000/index.html`.
 
-The core tables are:
-
-- `users`
-- `companies`
-- `internships`
-- `applications`
-- `skills`
-- `user_skills`
-
-The server will handle the initial schema setup.
-
----
-
-## Running the Application
-
-Once you have configured your `.env` file, you can start the server:
-
+### Method B: One-Click Runner (macOS / Linux)
+Open a terminal in the root folder:
 ```bash
-npm start
+chmod +x run.sh
+./run.sh
 ```
 
-The application will be available at `http://localhost:3000`.
-
----
-
-## Troubleshooting
-
-- **500 Error on Resume Upload**: This is almost always a configuration issue.
-  1.  **Check your `.env` file**: Ensure `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are correct.
-  2.  **Verify the Service Role Key**: Make sure you are using the `service_role` secret key, not the `anon` public key.
-  3.  **Check Bucket Name**: Confirm you have a storage bucket in Supabase named `resumes` or `resume`.
-  4.  **Check Bucket Policies**: Ensure your bucket policies are not blocking uploads. For initial setup, you can set a public-access policy.
-
-- **Database Connection Issues**:
-  1.  Verify your `DATABASE_URL` in the `.env` file is correct.
-  2.  Ensure your machine's firewall is not blocking outbound connections on port 5432.
-
----
-
-## Project Structure
-
-```
-/
-├── config/               # Configuration files (DB, Supabase, Email)
-├── controllers/          # Business logic (request handlers)
-├── middleware/           # Express middleware (auth, errors, uploads)
-├── public/               # Static frontend assets (HTML, CSS, JS)
-├── routes/               # API route definitions
-├── utils/                # Utility classes and functions
-├── .env                  # Environment variables (MUST be created)
-├── server.js             # Main application entry point
-└── package.json          # Project dependencies
-```
-
----
-
-## Technical Documentation
-
-### API Endpoints
-
-All API endpoints are prefixed with `/api`. See the `routes/` directory for a full breakdown of available routes.
-
-- `authRoutes.js`: User registration, login, password reset.
-- `profileRoutes.js`: Profile management, resume upload.
-- `companyRoutes.js`: Company information.
-- `applicationRoutes.js`: Internship applications.
-- `apiRoutes.js`: Main routes for internships and admin actions.
-
-### Authentication
-
-Authentication is handled using JSON Web Tokens (JWT). The `authMiddleware` protects routes that require a logged-in user. The token is sent in the `Authorization` header as a Bearer token.
-
-### Error Handling
-
-A global error handler in `middleware/errorMiddleware.js` catches all operational errors, logs them, and sends a structured JSON response to the client, preventing stack trace leaks in production.
-
-### Prerequisites
-
-Ensure the following software is installed on your system:
-
-#### Required
-
-**Node.js v18.0.0+** (LTS recommended)
-
-- Download: [https://nodejs.org](https://nodejs.org)
-- Verify installation:
-  ```bash
-  node --version
-  npm --version
-  ```
-
-#### Optional
-
-**Git** - For repository cloning
-
-- Download: [https://git-scm.com/downloads](https://git-scm.com/downloads)
-
-**Visual Studio Code** - Recommended code editor
-
-- Download: [https://code.visualstudio.com](https://code.visualstudio.com)
-
----
-
-### Step 1: Obtain Project Files
-
-**Method A: Download ZIP Archive**
-
-1. Download the project as a ZIP file
-2. Extract to your preferred directory (e.g., `C:\Projects\placement-tracker`)
-
-**Method B: Clone with Git**
-
+### Method C: Manual Python CLI
 ```bash
-git clone https://github.com/hnikhil-dev/PlacementTracker
-cd placement-tracker
+# 1. Create and activate virtual environment
+python -m venv .venv
+
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
+# 2. Install dependencies
+pip install -r backend/requirements.txt
+
+# 3. Start the application
+python backend/run.py
 ```
 
----
-
-### Step 2: Install Dependencies
-
-Open a terminal in the project root directory and execute:
-
-**Windows (PowerShell):**
-
-```powershell
-cd C:\Users\YourName\Desktop\placement-tracker
-npm install
-```
-
-**Mac/Linux (Terminal):**
-
+### Method D: Docker Compose
 ```bash
-cd ~/Desktop/placement-tracker
-npm install
+docker compose up --build
 ```
-
-**Note:** Installation typically takes 2-3 minutes. Expected output:
-
-```
-added 234 packages in 45s
-```
+Access at: `http://localhost:3000/index.html` (or `http://localhost:8080/index.html`).
 
 ---
 
-## Configuration
+## Deployment to Production
 
-### Step 3: Environment Variables Setup
-
-Create a `.env` file in the project root directory (same level as `server.js`).
-
-**Quick Start:** Copy `.env.example` to `.env` and update the values.
-
-```env
-# ==============================================
-# SERVER CONFIGURATION
-# ==============================================
-PORT=3000
-NODE_ENV=production
-
-# ==============================================
-# DATABASE (Supabase PostgreSQL)
-# ==============================================
-# Format: postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
-DATABASE_URL=postgresql://postgres:your_password@db.xxxxxxxxxxxxxx.supabase.co:5432/postgres
-
-# ==============================================
-# SUPABASE API & STORAGE
-# ==============================================
-SUPABASE_URL=https://xxxxxxxxxxxxxx.supabase.co
-SUPABASE_KEY=your_service_role_key_here
-
-# ==============================================
-# AUTHENTICATION
-# ==============================================
-JWT_SECRET=your_super_secret_random_string_min_32_characters
-
-# ==============================================
-# EMAIL (Optional - for password reset)
-# ==============================================
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_gmail_app_password
-
-# ==============================================
-# AI FEATURES (Optional)
-# ==============================================
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
----
-
-## Database Setup
-
-### Step 4: Supabase Configuration
-
-#### 4.1 Create Supabase Project
-
-1. Navigate to [https://supabase.com](https://supabase.com)
-2. Sign up for a free account
-3. Create a new project:
-   - **Project Name:** `placement-tracker`
-   - **Database Password:** Choose a secure password (save this credential)
-   - **Region:** Select the geographically closest region
-
-#### 4.2 Database Connection String
-
-1. In Supabase Dashboard: **Settings** > **Database**
-2. Locate **Connection String** section
-3. Select the **URI** tab
-4. Copy the connection string:
+### Option 1: Railway.app / Render.com
+1. Push your repository to GitHub.
+2. Create a new service on **Render** or **Railway**.
+3. Set the build command:
+   ```bash
+   pip install -r backend/requirements.txt
    ```
-   postgresql://postgres:[YOUR-PASSWORD]@db.xxx.supabase.co:5432/postgres
+4. Set the start command:
+   ```bash
+   python backend/run.py
    ```
-5. Replace `[YOUR-PASSWORD]` with your database password
-6. Paste into `DATABASE_URL` in `.env`
+5. Add your environment variables from `.env` in the platform settings.
+6. Deploy! The frontend dynamically adapts to the host URL without any code modifications.
 
-#### 4.3 API Credentials
-
-1. Navigate to **Settings** > **API**
-2. Copy the following values:
-   - **Project URL** → Paste into `SUPABASE_URL`
-   - **service_role key** (secret) → Paste into `SUPABASE_KEY`
-
-**Important:** Use the `service_role` key (not `anon` key) for server-side operations.
-
-#### 4.4 Storage Bucket Configuration
-
-1. In Supabase Dashboard: **Storage** section
-2. Click **New Bucket**
-   - **Bucket Name:** `resumes`
-   - **Public Access:** Enable (checked)
-3. Click **Create Bucket**
-
-#### 4.5 Database Schema Initialization
-
-1. Navigate to **SQL Editor** in Supabase Dashboard
-2. Click **New Query**
-3. Copy and execute the following SQL:
-
-```sql
--- Create Users Table
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    full_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) DEFAULT 'student',
-    resume_link TEXT,
-    skills TEXT[],
-    verified_skills TEXT[],
-    batch_year INTEGER,
-    college_verified BOOLEAN DEFAULT false,
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Create Internships Table
-CREATE TABLE IF NOT EXISTS internships (
-    id SERIAL PRIMARY KEY,
-    company_name VARCHAR(255) NOT NULL,
-    role_title VARCHAR(255) NOT NULL,
-    stipend VARCHAR(100),
-    type VARCHAR(50),
-    required_skills TEXT[],
-    description TEXT,
-    deadline DATE,
-    posted_at TIMESTAMP DEFAULT NOW()
-);
-
--- Create Applications Table
-CREATE TABLE IF NOT EXISTS applications (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    internship_id INTEGER REFERENCES internships(id) ON DELETE CASCADE,
-    status VARCHAR(50) DEFAULT 'applied',
-    applied_at TIMESTAMP DEFAULT NOW(),
-    UNIQUE(user_id, internship_id)
-);
-
--- Create Indexes for Performance
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_applications_status ON applications(status);
-CREATE INDEX idx_internships_deadline ON internships(deadline);
-```
-
----
-
-## Running the Application
-
-### Step 5: Start the Server
-
-**Option A: Production Mode**
-
+### Option 2: Docker Container
+Build and run the containerized application on any cloud host (AWS ECS, GCP Cloud Run, DigitalOcean, Azure):
 ```bash
-npm start
+docker build -t placement-tracker .
+docker run -p 8080:8080 --env-file .env placement-tracker
 ```
-
-**Option B: Development Mode** (with auto-reload)
-
-```bash
-npm run dev
-```
-
-**Expected Console Output:**
-
-```
-[INFO] Security middleware initialized
-[INFO] Static files served from /public
-[INFO] CORS enabled for all origins
-[INFO] Database connected successfully
-[INFO] ENTERPRISE SERVER running on port 3000
-```
-
-**Common Startup Errors:**
-
-- Verify all `.env` variables are set correctly
-- Ensure Supabase project is active (not paused)
-- Check that port 3000 is not in use by another application
-
----
-
-### Step 6: Access the Application
-
-Open a web browser and navigate to:
-
-```
-http://localhost:3000
-```
-
-**Available Routes:**
-
-- **Login Page:** `http://localhost:3000/index.html`
-- **Registration:** `http://localhost:3000/register.html`
-- **Student Dashboard:** `http://localhost:3000/dashboard.html`
-- **Admin Panel:** `http://localhost:3000/admin.html`
-
----
-
-### Step 7: Create Initial User Account
-
-1. Navigate to `http://localhost:3000/register.html`
-2. Complete the registration form:
-   - Full Name
-   - Email Address
-   - Password (minimum 6 characters)
-   - Batch Year
-3. Click **Register**
-4. Login at `http://localhost:3000/index.html` with your credentials
-
----
-
-## Command Reference
-
-### Common npm Commands
-
-```bash
-# Install all project dependencies
-npm install
-
-# Start application (production mode)
-npm start
-
-# Start application (development mode with nodemon)
-npm run dev
-
-# Stop server
-# Press Ctrl + C in terminal
-
-# Check installed Node.js version
-node --version
-
-# Check installed npm version
-npm --version
-
-# Clear npm cache (if installation issues occur)
-npm cache clean --force
-```
-
----
-
-## Troubleshooting
-
-### Issue 1: Port Already in Use
-
-**Error Message:** `Error: listen EADDRINUSE: address already in use :::3000`
-
-**Solution:** Modify port in `.env` file:
-
-```env
-PORT=4000
-```
-
-Then access application at `http://localhost:4000`
-
----
-
-### Issue 2: Module Not Found
-
-**Error Message:** `Error: Cannot find module 'express'`
-
-**Solution:** Install dependencies:
-
-```bash
-npm install
-```
-
----
-
-### Issue 3: Database Connection Failed
-
-**Error Message:** `Error: connect ECONNREFUSED` or `Database connection failed`
-
-**Solution:**
-
-1. Verify `DATABASE_URL` in `.env` is correct
-2. Check Supabase project status (free tier auto-pauses after inactivity)
-3. Confirm database password is correct
-4. Ensure network connectivity to Supabase servers
-
----
-
-### Issue 4: JWT Authentication Errors
-
-**Error Message:** `JsonWebTokenError: jwt malformed` or `invalid signature`
-
-**Solution:** Generate a new secure JWT secret:
-
-**Windows PowerShell:**
-
-```powershell
--join ((65..90) + (97..122) + (48..57) | Get-Random -Count 32 | ForEach-Object {[char]$_})
-```
-
-**Mac/Linux:**
-
-```bash
-openssl rand -base64 32
-```
-
-Update `JWT_SECRET` in `.env` with the generated value.
-
----
-
-### Issue 5: Resume Upload Failure
-
-**Error Message:** `Storage upload failed` or `400 Bad Request`
-
-**Solution:**
-
-1. Verify `resumes` storage bucket exists in Supabase
-2. Confirm bucket is set to **public**
-3. Ensure `SUPABASE_KEY` uses **service_role** key (not anon key)
-4. Check bucket permissions in Supabase Dashboard
-
----
-
-### Issue 6: CORS Errors
-
-**Error Message:** `Access to fetch blocked by CORS policy`
-
-**Solution:**
-
-- Verify server is running on `http://localhost:3000`
-- Check browser console for specific CORS error details
-- Ensure CORS middleware is properly configured in `server.js`
 
 ---
 
@@ -629,215 +156,51 @@ Update `JWT_SECRET` in `.env` with the generated value.
 
 ```
 placement-tracker/
-├── config/
-│   ├── db.js                 # PostgreSQL connection pool
-│   ├── email.js              # Nodemailer configuration
-│   └── supabaseClient.js     # Supabase client initialization
-├── controllers/
-│   ├── adminController.js    # Admin panel logic
-│   ├── aiController.js       # AI/Gemini integration
-│   ├── applicationController.js
-│   ├── authController.js     # Authentication & authorization
-│   ├── companyController.js
-│   ├── internshipController.js
-│   ├── profileController.js  # User profile & resume handling
-│   └── skillController.js
-├── middleware/
-│   ├── authMiddleware.js     # JWT verification
-│   ├── errorMiddleware.js    # Global error handler
-│   └── uploadMiddleware.js   # Multer file upload
-├── public/
-│   ├── css/
-│   │   └── style.css         # Glassmorphism styles
-│   ├── js/
-│   │   ├── admin.js
-│   │   ├── auth.js
-│   │   ├── config.js
-│   │   └── dashboard.js
-│   ├── admin.html
-│   ├── dashboard.html
-│   ├── index.html
-│   ├── register.html
-│   └── reset-password.html
-├── routes/
-│   ├── apiRoutes.js
-│   ├── applicationRoutes.js
-│   ├── authRoutes.js
-│   ├── companyRoutes.js
-│   └── profileRoutes.js
-├── utils/
-│   ├── appError.js           # Custom error class
-│   ├── logger.js             # Logging utility
-│   └── skillMatcher.js       # Skill matching algorithm
-├── .env                      # Environment variables (create this)
-├── .env.example              # Environment template
-├── package.json              # Project dependencies
-├── server.js                 # Application entry point
-└── README.md                 # This file
+├── backend/                          # Python FastAPI backend
+│   ├── app/
+│   │   ├── routers/                  # API endpoints
+│   │   │   ├── auth.py               # Register, login, reset-password, me
+│   │   │   ├── internships.py        # Opportunities, matching ratio, search
+│   │   │   ├── applications.py       # Apply, student applications, stats
+│   │   │   ├── profile.py            # Profile details, PDF resume parsing
+│   │   │   ├── skills.py             # Skill quiz verification & history
+│   │   │   ├── ai.py                 # Gemini quiz generation & 30-day gap roadmaps
+│   │   │   └── admin.py              # Leaderboard composite rankings & student management
+│   │   ├── services/                 # Business logic services
+│   │   │   ├── ai_service.py         # Gemini AI & offline question bank
+│   │   │   ├── storage_service.py    # Supabase Storage PDF uploader
+│   │   │   └── email_service.py      # SMTP password reset mailer
+│   │   ├── auth.py                   # JWT security & BCrypt utilities
+│   │   ├── config.py                 # Environment & connection URL parser
+│   │   ├── database.py               # PostgreSQL connection pooling & skill normalizer
+│   │   ├── init_db.py                # Database self-bootstrapping & seeder
+│   │   └── main.py                   # FastAPI app, static routes, and CORS setup
+│   ├── run.py                        # Server launch script
+│   └── requirements.txt              # Python package dependencies
+├── public/                           # Static Frontend Glassmorphism UI
+│   ├── css/                          # Custom design stylesheets
+│   ├── js/                           # Frontend controllers (auth, dashboard, config)
+│   ├── index.html                    # Student & Admin Login
+│   ├── register.html                 # Student Registration
+│   ├── dashboard.html                # Student Portal (Opportunities, Profile, Badges)
+│   ├── admin.html                    # Officer Portal (Rankings, Job Post, Applications)
+│   └── reset-password.html           # Password Recovery
+├── supabase_setup.sql                # Complete Supabase DDL & seed script
+├── run.bat                           # Super-smart Windows launcher
+├── run.sh                            # macOS/Linux launcher
+├── Dockerfile                        # Multi-arch Docker container specification
+├── docker-compose.yml                # Docker Compose setup
+├── Documentation.html                # Interactive User & Officer Guide
+├── Placement_Tracker_Documentation.pdf # Enterprise PDF Documentation
+└── README.md                         # This file
 ```
 
 ---
 
-## Technical Documentation
+## Default Credentials
 
-### Architecture Overview
-
-The application follows a three-tier architecture:
-
-1. **Presentation Layer** (Frontend)
-   - HTML/CSS/JavaScript SPA (Single Page Application)
-   - Client-side routing and state management
-   - Fetch API for backend communication
-
-2. **Application Layer** (Backend)
-   - Express.js RESTful API
-   - JWT-based stateless authentication
-   - Middleware pipeline for request processing
-
-3. **Data Layer** (Database)
-   - PostgreSQL relational database
-   - Supabase cloud infrastructure
-   - Connection pooling for performance
-
-### Authentication Flow
-
-```
-1. User submits credentials
-2. Server validates against database
-3. bcrypt verifies hashed password
-4. JWT token generated with user payload
-5. Token stored in localStorage (client)
-6. Subsequent requests include token in Authorization header
-7. Middleware validates token on protected routes
-```
-
-### Resume Parsing Process
-
-```
-1. User uploads PDF via multipart/form-data
-2. Multer middleware processes file to buffer
-3. pdf2json extracts raw text content
-4. Skill dictionary matches keywords
-5. Extracted skills saved to user profile
-6. File uploaded to Supabase Storage
-7. Public URL returned and saved to database
-```
-
-### Database Schema
-
-**Users Table**
-
-- Stores student/admin profiles
-- Encrypted passwords (bcrypt)
-- Array fields for skills and verified_skills
-
-**Internships Table**
-
-- Internship/Job/internship postings
-- Required skills stored as array
-- Deadline tracking
-
-**Applications Table**
-
-- Links users to internships
-- Status tracking (applied, shortlisted, rejected)
-- Composite unique constraint prevents duplicate applications
-
-### Security Measures
-
-1. **Password Security**
-   - bcrypt hashing (10 rounds)
-   - No plaintext storage
-
-2. **SQL Injection Prevention**
-   - Parameterized queries ($1, $2, etc.)
-   - Input validation via express-validator
-
-3. **XSS Protection**
-   - Helmet.js security headers
-   - Content Security Policy
-
-4. **DDoS Mitigation**
-   - Rate limiting (100 requests/15 minutes)
-   - Request throttling
-
-5. **Authentication**
-   - JWT with expiration
-   - Secure token storage
-
----
-
-## Deployment Considerations
-
-### Environment Variables for Production
-
-```env
-NODE_ENV=production
-PORT=3000
-```
-
-### Recommended Hosting Platforms
-
-- **Backend**: Heroku, Railway, Render
-- **Database**: Supabase (cloud-hosted PostgreSQL)
-- **Storage**: Supabase Storage
-- **Frontend**: Netlify, Vercel (if separated)
-
-### Performance Optimizations
-
-1. Enable PostgreSQL connection pooling
-2. Implement Redis caching for frequently accessed data
-3. Compress static assets (gzip/brotli)
-4. Use CDN for static file delivery
-5. Implement database query optimization and indexing
-
----
-
-## Updating the Application
-
-To pull and deploy the latest changes:
-
-```bash
-# Stop the running server
-# Press Ctrl + C
-
-# Pull latest code (if using Git)
-git pull origin main
-
-# Install new dependencies (if package.json changed)
-npm install
-
-# Restart server
-npm start
-```
-
----
-
-## Support
-
-For technical issues or questions:
-
-1. Check console/terminal for error messages
-2. Verify all environment variables are configured
-3. Ensure Supabase project is active and accessible
-4. Confirm no port conflicts exist
-
----
-
-## License
-
-This project is licensed under the MIT License - see LICENSE file for details.
-
----
-
-## Credits
-
-**Developed for Final Year Project 2026**  
-Enterprise-grade placement management system with AI integration.
-
----
-
-**Version:** 1.0.0  
-**Last Updated:** March 2026  
-**Node.js:** v18.0.0+  
-**Status:** Production Ready
+* **Student Demo Account**: Register a new student via `register.html` or use an existing student login.
+* **Administrator Account**:
+  * Email: `admin@placementtracker.com`
+  * Password: `Admin@123`
+* **Interactive API Documentation**: Visit `http://localhost:3000/docs` (Swagger UI) or `http://localhost:3000/redoc`.

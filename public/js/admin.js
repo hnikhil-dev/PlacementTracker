@@ -96,7 +96,7 @@ document.getElementById('postJobForm').addEventListener('submit', async (e) => {
             method: 'POST',
             body: JSON.stringify({ company_name, role_title, stipend, duration, mode, type, location, deadline, required_skills })
         });
-        const data = await res.json();
+        const data = await safeJson(res);
         if (res.ok) {
             toast(`"${role_title}" at ${company_name} posted successfully!`, 'success');
             document.getElementById('postJobForm').reset();
@@ -123,7 +123,7 @@ async function loadAllApplications() {
     try {
         const res = await authenticatedFetch('/applications/admin-view');
         if (!res.ok) throw new Error('Fetch failed');
-        const data = await res.json();
+        const data = await safeJson(res, []);
         allAppsCache = Array.isArray(data) ? data : (data.data || []);
 
         document.getElementById('appSubtitle').textContent = `${allAppsCache.length} application${allAppsCache.length !== 1 ? 's' : ''} found`;
@@ -276,7 +276,7 @@ async function updateStatus(appId, newStatus, reason) {
             toast(`Status updated to "${newStatus}"${reason ? ' — Reason noted.' : ''}`, 'success');
             loadAllApplications();
         } else {
-            const d = await res.json();
+            const d = await safeJson(res);
             toast('Failed: ' + (d.error || d.message), 'error');
         }
     } catch (err) {
@@ -290,7 +290,7 @@ async function loadAdminStats() {
     try {
         const res = await authenticatedFetch('/applications/admin-view');
         if (!res.ok) throw new Error();
-        const data = await res.json();
+        const data = await safeJson(res, []);
         const apps = Array.isArray(data) ? data : (data.data || []);
 
         const total = apps.length;
@@ -356,7 +356,7 @@ async function loadStudents() {
     try {
         const res = await authenticatedFetch('/admin/students');
         if (!res.ok) throw new Error('Fetch failed');
-        const data = await res.json();
+        const data = await safeJson(res);
         allStudentsCache = Array.isArray(data.data) ? data.data : [];
         document.getElementById('studentSubtitle').textContent =
             `${allStudentsCache.length} student${allStudentsCache.length !== 1 ? 's' : ''} registered`;
@@ -435,7 +435,7 @@ async function toggleCollegeVerify(studentId, verified) {
             toast(`College Verified badge ${verified ? 'granted' : 'revoked'} successfully.`, 'success');
             loadStudents();
         } else {
-            const d = await res.json();
+            const d = await safeJson(res);
             toast('Failed: ' + (d.message || d.error), 'error');
         }
     } catch (err) {
@@ -452,8 +452,8 @@ async function loadApplyDropdowns() {
             authenticatedFetch('/admin/students'),
             authenticatedFetch('/internships')
         ]);
-        const studData = await studRes.json();
-        const intData = await intRes.json();
+        const studData = await safeJson(studRes);
+        const intData = await safeJson(intRes, []);
 
         const students = Array.isArray(studData.data) ? studData.data : [];
         const internships = Array.isArray(intData) ? intData : (intData.data || []);
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     body: JSON.stringify({ student_id, internship_id })
                 });
-                const data = await res.json();
+                const data = await safeJson(res);
                 if (res.ok) {
                     toast('Application created successfully!', 'success');
                     applyForm.reset();
@@ -520,7 +520,7 @@ async function loadRankings() {
     try {
         const res = await authenticatedFetch('/admin/rankings');
         if (!res.ok) throw new Error('Fetch failed');
-        const data = await res.json();
+        const data = await safeJson(res);
         allRankingsCache = Array.isArray(data.data) ? data.data : [];
 
         document.getElementById('rankingBadge').textContent = allRankingsCache.length;

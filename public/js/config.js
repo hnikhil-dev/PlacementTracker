@@ -3,6 +3,27 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
     ? `http://localhost:${window.location.port || 3000}/api`
     : `${window.location.origin}/api`;
 
+/**
+ * Safely parse JSON from a fetch Response.
+ * Returns parsed JSON, or a fallback object if the body is empty / not JSON.
+ */
+async function safeJson(response, fallback = {}) {
+    if (!response) return fallback;
+    const contentType = response.headers?.get('content-type') || '';
+    // If Content-Length is 0 or status is 204 No Content, skip parsing
+    if (response.status === 204 || response.headers?.get('content-length') === '0') {
+        return fallback;
+    }
+    try {
+        const text = await response.text();
+        if (!text || text.trim().length === 0) return fallback;
+        return JSON.parse(text);
+    } catch (e) {
+        console.warn('safeJson: Could not parse response as JSON:', e.message);
+        return fallback;
+    }
+}
+
 // Helper function to handle fetch with Auth Token automatically
 async function authenticatedFetch(url, options = {}) {
     const token = localStorage.getItem('token');
@@ -31,8 +52,9 @@ async function authenticatedFetch(url, options = {}) {
         alert("Session expired. Please login again.");
         localStorage.clear();
         window.location.href = 'index.html';
-        return;
+        // Throw so callers don't try to use the response
+        throw new Error('SESSION_EXPIRED');
     }
 
     return response;
-}
+}

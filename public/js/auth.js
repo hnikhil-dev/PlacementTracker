@@ -20,7 +20,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password })
         });
 
-        const data = await response.json();
+        const data = await safeJson(response);
 
         if (response.ok) {
             // Success: Save Token
@@ -62,7 +62,7 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
             body: JSON.stringify({ full_name, email, password, role })
         });
 
-        const data = await response.json();
+        const data = await safeJson(response);
 
         if (response.ok) {
             alert("Registration Successful! Please login.");

@@ -1,0 +1,12 @@
+services:
+  placement-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: placement-tracker-app
+    ports:
+      - "8080:8080"
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: always

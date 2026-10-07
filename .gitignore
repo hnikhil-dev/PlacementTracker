@@ -1,11 +1,61 @@
-node_modules
+# ==============================================================================
+# SMART PLACEMENT TRACKER — Git Ignore Rules
+# ==============================================================================
+
+# Local Environment Variables & Secrets (CRITICAL)
 .env
-.DS_Store
+.env.local
+.env.*
+!.env.example
+
+# Python Virtual Environments & Packages
+.venv/
+env/
+venv/
+ENV/
+*.venv
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# IDE & Editor Configurations
+.cursor/
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+.factorypath
+
+# Scratch & Temporary Testing Scripts
+scratch/
 *.log
 npm-debug.log*
-logs/
+*.tmp
+*.bak
+
+# OS Temporary Files
+.DS_Store
+Thumbs.db
+
+# Archives & Builds
+*.zip
+*.tar.gz
+*.rar
 dist/
 build/
 coverage/
 
-*.zip
+# Legacy Folders (Java / Node)
+node_modules/
+placement-tracker-springboot/
+target/
+*.class
+out/
+jdk-17/
+bin/

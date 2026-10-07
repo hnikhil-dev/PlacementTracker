@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Tracker - Complete System & User Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --primary-dark: #15803d;
+            --primary-light: #f0fdf4;
+            --primary-border: #bbf7d0;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --warning: #d97706;
+            --warning-light: #fffbeb;
+            --danger: #dc2626;
+            --danger-light: #fef2f2;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--slate-50);
+            color: var(--slate-800);
+            line-height: 1.65;
+            padding-bottom: 90px;
+        }
+
+        /* HEADER BANNER */
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 55px 20px 45px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .header-content {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(22, 163, 74, 0.18);
+            border: 1px solid rgba(22, 163, 74, 0.4);
+            color: #86efac;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        header h1 span {
+            color: #4ade80;
+        }
+
+        header p {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            font-weight: 300;
+            max-width: 760px;
+            margin: 0 auto 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary-header:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-header {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline-header:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1100px;
+            margin: 35px auto 0;
+            padding: 0 20px;
+        }
+
+        /* TAB NAVIGATION */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--slate-200);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--slate-600);
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--slate-900);
+            background-color: var(--slate-100);
+        }
+
+        .tab-btn.active {
+            color: white;
+            background-color: var(--primary);
+            box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
+        }
+
+        /* SECTION CARDS */
+        .section-card {
+            background-color: white;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            padding: 38px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 28px;
+        }
+
+        .section-card h2 {
+            font-size: 1.85rem;
+            color: var(--slate-900);
+            margin-bottom: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-card h2 i {
+            color: var(--primary);
+        }
+
+        .section-intro {
+            color: var(--slate-600);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--slate-200);
+            padding-bottom: 16px;
+        }
+
+        .subheading {
+            font-size: 1.35rem;
+            color: var(--slate-800);
+            font-weight: 700;
+            margin: 28px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subheading i {
+            color: var(--primary);
+            font-size: 1.15rem;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: var(--slate-700);
+        }
+
+        /* PROBLEM VS SOLUTION GRID */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 24px 0 32px;
+        }
+
+        .comp-card {
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--slate-200);
+        }
+
+        .comp-card.problem {
+            background-color: #fff7ed;
+            border-color: #fed7aa;
+        }
+
+        .comp-card.problem h3 {
+            color: #c2410c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .comp-card.solution {
+            background-color: var(--primary-light);
+            border-color: var(--primary-border);
+        }
+
+        .comp-card.solution h3 {
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .comp-list {
+            list-style: none;
+        }
+
+        .comp-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: var(--slate-700);
+        }
+
+        .comp-card.problem .comp-list li::before {
+            content: "✕";
+            position: absolute;
+            left: 0;
+            color: #ea580c;
+            font-weight: bold;
+        }
+
+        .comp-card.solution .comp-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* STEP LIST (TIMELINE) */
+        .step-list {
+            list-style: none;
+            margin: 24px 0 30px;
+        }
+
+        .step-item {
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 34px;
+        }
+
+        .step-item::before {
+            content: "";
+            position: absolute;
+            left: 22px;
+            top: 36px;
+            bottom: -34px;
+            width: 2px;
+            background-color: var(--slate-200);
+        }
+
+        .step-item:last-child::before {
+            display: none;
+        }
+
+        .step-num {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 44px;
+            height: 44px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+            font-size: 1.15rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 6px;
+        }
+
+        .step-desc {
+            color: var(--slate-600);
+            font-size: 0.98rem;
+        }
+
+        /* INFO BOXES & CALLOUTS */
+        .callout {
+            padding: 18px 22px;
+            border-radius: var(--radius-md);
+            margin: 18px 0;
+            display: flex;
+            gap: 14px;
+            font-size: 0.95rem;
+        }
+
+        .callout i {
+            font-size: 1.25rem;
+            margin-top: 2px;
+        }
+
+        .callout-info {
+            background-color: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            color: #1e3a8a;
+        }
+
+        .callout-info i { color: var(--accent); }
+
+        .callout-tip {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            color: #064e3b;
+        }
+
+        .callout-tip i { color: var(--primary); }
+
+        .callout-warning {
+            background-color: var(--warning-light);
+            border-left: 4px solid var(--warning);
+            color: #78350f;
+        }
+
+        .callout-warning i { color: var(--warning); }
+
+        /* FEATURE & ARCHITECTURE GRIDS */
+        .grid-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 22px 0;
+        }
+
+        .feature-card {
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            background-color: var(--slate-50);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+            background-color: white;
+        }
+
+        .feature-card .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 14px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--slate-900);
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            font-size: 0.92rem;
+            color: var(--slate-600);
+            margin-bottom: 0;
+        }
+
+        /* CODE & FORMULA BOXES */
+        .formula-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            padding: 22px;
+            border-radius: var(--radius-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            margin: 18px 0;
+            border: 1px solid var(--slate-700);
+        }
+
+        .formula-box .highlight {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .formula-box .comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        pre code {
+            display: block;
+            background-color: var(--slate-900);
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 14px 0;
+        }
+
+        /* TABLES */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--slate-200);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--slate-100);
+            color: var(--slate-900);
+            font-weight: 700;
+            padding: 14px 18px;
+            border-bottom: 2px solid var(--slate-200);
+        }
+
+        td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--slate-200);
+            color: var(--slate-700);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: var(--slate-50);
+        }
+
+        .pill-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .pill-badge.get { background-color: #dbeafe; color: #1e40af; }
+        .pill-badge.post { background-color: #dcfce7; color: #166534; }
+        .pill-badge.put { background-color: #fef3c7; color: #92400e; }
+        .pill-badge.delete { background-color: #fee2e2; color: #991b1b; }
+
+        /* FAQ ACCORDION */
+        .faq-item {
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-md);
+            margin-bottom: 14px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .faq-question {
+            padding: 18px 22px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            transition: background-color 0.2s;
+        }
+
+        .faq-question:hover {
+            background-color: var(--slate-50);
+        }
+
+        .faq-answer {
+            padding: 0 22px 18px;
+            color: var(--slate-600);
+            font-size: 0.95rem;
+            border-top: 1px solid var(--slate-100);
+            padding-top: 14px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .section-card { padding: 24px; }
+            .nav-tabs { flex-wrap: nowrap; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="header-badge">
+                <i class="fas fa-check-shield"></i> Production Ready &amp; Client Ready
+            </div>
+            <h1>Smart <span>Placement Tracker</span> Platform</h1>
+            <p>
+                An enterprise student placement management and internship ecosystem powered by Python FastAPI, Supabase PostgreSQL, and Google Gemini AI.
+            </p>
+            <div class="header-actions">
+                <a href="Placement_Tracker_Documentation.pdf" target="_blank" class="btn-header btn-primary-header">
+                    <i class="fas fa-file-pdf"></i> Download PDF Documentation
+                </a>
+                <a href="index.html" class="btn-header btn-outline-header">
+                    <i class="fas fa-arrow-right"></i> Launch Application
+                </a>
+                <a href="/docs" target="_blank" class="btn-header btn-outline-header">
+                    <i class="fas fa-code"></i> Live API Swagger Docs
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- NAVIGATION TABS -->
+        <nav class="nav-tabs" aria-label="Documentation Sections">
+            <button class="tab-btn active" onclick="switchTab('overview')">
+                <i class="fas fa-compass"></i> 1. Plain English Overview
+            </button>
+            <button class="tab-btn" onclick="switchTab('student')">
+                <i class="fas fa-user-graduate"></i> 2. Student Walkthrough
+            </button>
+            <button class="tab-btn" onclick="switchTab('admin')">
+                <i class="fas fa-user-tie"></i> 3. Officer (Admin) Guide
+            </button>
+            <button class="tab-btn" onclick="switchTab('technical')">
+                <i class="fas fa-server"></i> 4. Technical Architecture
+            </button>
+            <button class="tab-btn" onclick="switchTab('setup')">
+                <i class="fas fa-rocket"></i> 5. Setup, Launch &amp; FAQ
+            </button>
+        </nav>
+
+        <!-- ============================================================== -->
+        <!-- TAB 1: PLAIN ENGLISH OVERVIEW (NON-TECHNICAL & BEGINNER)        -->
+        <!-- ============================================================== -->
+        <div id="tab-overview">
+            <div class="section-card">
+                <h2><i class="fas fa-lightbulb"></i> What is this Project in Simple Words?</h2>
+                <div class="section-intro">
+                    If you explain this project to a college dean, a recruiter, or a first-year student with zero coding knowledge, here is what it does and why it was built.
+                </div>
+
+                <p>
+                    Every year, college placement cells face chaos during campus recruitment drives:
+                </p>
+
+                <div class="comparison-grid">
+                    <div class="comp-card problem">
+                        <h3><i class="fas fa-triangle-exclamation"></i> The Problem Before</h3>
+                        <ul class="comp-list">
+                            <li><strong>Students apply blindly:</strong> Students submit resumes to 50 companies without knowing if they actually match the requirements.</li>
+                            <li><strong>Unverified Resume Claims:</strong> Resumes say "Expert in Python, Docker, React", but recruiters find out the candidate only knows basics during the interview.</li>
+                            <li><strong>No Guidance on Missing Skills:</strong> When rejected, students have no idea what to study to qualify next time.</li>
+                            <li><strong>Placement Cells Drown in Excel:</strong> Training &amp; Placement Officers (TPOs) manage hundreds of Google Sheets, manually matching students to jobs.</li>
+                        </ul>
+                    </div>
+
+                    <div class="comp-card solution">
+                        <h3><i class="fas fa-circle-check"></i> What This System Does</h3>
+                        <ul class="comp-list">
+                            <li><strong>Automated Resume Scanning:</strong> Students upload their PDF resume. The system automatically reads it and populates their verified skills.</li>
+                            <li><strong>Skill Badges via Quizzes:</strong> Candidates take quick 5-question technical quizzes to earn verified badges. Companies can trust verified skills.</li>
+                            <li><strong>Real-Time Match Percentages:</strong> Every job posting shows a clear match score (e.g., <em>"85% Match - Missing: Docker"</em>).</li>
+                            <li><strong>30-Day AI Roadmap:</strong> With 1 click, AI builds a tailored 4-week learning calendar with actual YouTube &amp; FreeCodeCamp links for missing skills.</li>
+                            <li><strong>Live Academic Leaderboard:</strong> Automatically ranks students based on CGPA, verified badges, shortlists, and placement offers.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subheading">
+                    <i class="fas fa-users"></i> The Two Main Portals
+                </div>
+
+                <div class="grid-features">
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-graduation-cap"></i></div>
+                        <h4>1. The Student Portal</h4>
+                        <p>Designed for undergraduate and postgraduate students to build verified profiles, discover tailored internships, practice technical quizzes, apply in one click, and track application statuses live.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-shield-halved"></i></div>
+                        <h4>2. The Placement Officer (Admin) Portal</h4>
+                        <p>Designed for College Placement Officers to post drives, review student submissions, verify official college academic records, give written feedback, and monitor real-time cohort rankings.</p>
+                    </div>
+                </div>
+
+                <div class="callout callout-tip">
+                    <i class="fas fa-bolt"></i>
+                    <div>
+                        <strong>Key Takeaway:</strong> This is not just a job board. It is an intelligent feedback loop that helps students understand <em>why</em> they are not matching a job, shows them <em>how</em> to fix it in 30 days, and gives colleges verified student proof.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- TAB 2: STUDENT WALKTHROUGH                                      -->
+        <!-- ============================================================== -->
+        <div id="tab-student" class="hidden">
+            <div class="section-card">
+                <h2><i class="fas fa-user-graduate"></i> Complete Student User Journey</h2>
+                <div class="section-intro">
+                    A clear, step-by-step walkthrough of how a student uses the platform from account creation to receiving placement offers.
+                </div>
+
+                <ol class="step-list">
+                    <li class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-title">Create Account &amp; Profile Setup</div>
+                        <div class="step-desc">
+                            Register on <code>register.html</code> using your student email. Enter your Department (e.g. CSE, IT, ECE), your Batch Year, and current CGPA. On login, you receive a secure token that keeps your session active for 7 days.
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-title">Upload Resume PDF (Automated Skill Extraction)</div>
+                        <div class="step-desc">
+                            Go to your <strong>Profile</strong> tab and drop your resume in PDF format. The backend parser extracts your text and compares it against our master library of 160+ industry technologies (Python, React, AWS, Docker, etc.).
+                            <div class="callout callout-info" style="margin-top: 10px;">
+                                <i class="fas fa-file-pdf"></i>
+                                <div>
+                                    <strong>Safe Cloud Storage:</strong> Resumes are securely saved in Supabase Storage. A direct link is added to your profile so recruiters and placement officers can view it with one click.
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-title">Take 5-Question Quizzes to Earn Verified Badges</div>
+                        <div class="step-desc">
+                            Any student can write "Java" on a resume. To prove it, click the <strong>Verify</strong> button next to any skill on your dashboard. 
+                            <ul>
+                                <li>You take a 5-question multiple choice technical quiz.</li>
+                                <li>Score 4 out of 5 (80%) or higher to pass.</li>
+                                <li>Passing awards you a permanent <strong>Verified Skill Badge</strong> that appears on your profile and increases your campus ranking.</li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-title">Review Opportunities &amp; Match Ratios</div>
+                        <div class="step-desc">
+                            Open the <strong>Opportunities</strong> tab. The system compares your verified skills against every job requirement and calculates your match percentage:
+                            <ul style="margin-top: 8px;">
+                                <li><strong style="color: #16a34a;">100% Match (Trophy Badge):</strong> You possess all required technical skills.</li>
+                                <li><strong style="color: #2563eb;">Partial Match (Star Badge):</strong> You have some skills, and missing skills are listed in red chips.</li>
+                            </ul>
+                            Click <strong>Apply Now</strong> to submit your application immediately.
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-num">5</div>
+                        <div class="step-title">Generate 30-Day AI Skill Gap Learning Plan</div>
+                        <div class="step-desc">
+                            If you don't match 100% of a job's requirements, click <strong>Gap Analysis</strong> on that job card. The AI compares what you know versus what the company wants and builds a 4-week learning calendar with real clickable links to YouTube and documentation.
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-num">6</div>
+                        <div class="step-title">Track Status &amp; Download Profile Card</div>
+                        <div class="step-desc">
+                            In the <strong>Applications</strong> tab, track your submissions live:
+                            <span class="pill-badge post">Applied</span> &rarr;
+                            <span class="pill-badge put">Shortlisted</span> &rarr;
+                            <span class="pill-badge get">Offered</span>.
+                            You can also view written notes from placement officers explaining why you were shortlisted or what to prepare for the technical round.
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- TAB 3: PLACEMENT OFFICER GUIDE                                 -->
+        <!-- ============================================================== -->
+        <div id="tab-admin" class="hidden">
+            <div class="section-card">
+                <h2><i class="fas fa-user-tie"></i> College Placement Officer (TPO) Guide</h2>
+                <div class="section-intro">
+                    How Training &amp; Placement Officers manage recruitment drives, verify student credentials, and identify top performers.
+                </div>
+
+                <div class="grid-features">
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-plus-circle"></i></div>
+                        <h4>1. Post Recruitment Drives</h4>
+                        <p>Under <strong>Post Job</strong>, publish opportunities. Specify company name, role title, stipend, duration, work mode (Remote/Hybrid/Onsite), job type, and comma-separated technical skills.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-id-card-clip"></i></div>
+                        <h4>2. Student Directory &amp; Verification</h4>
+                        <p>Browse all registered students, view uploaded resumes, and verify CGPA against university ERP. Toggle <strong>Verify College Credentials</strong> to officially endorse students.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-list-check"></i></div>
+                        <h4>3. Application Review &amp; Feedback</h4>
+                        <p>Under <strong>Applicants</strong>, view all submissions sorted by match percentage. Update candidate status to Shortlisted, Offered, or Rejected, with written feedback.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-ranking-star"></i></div>
+                        <h4>4. Student Ranking Leaderboard</h4>
+                        <p>A unified leaderboard automatically ranks candidates using our composite formula. Highlight top performers for premier hiring companies like Google and Microsoft.</p>
+                    </div>
+                </div>
+
+                <div class="subheading">
+                    <i class="fas fa-calculator"></i> The Fair Leaderboard Scoring Formula
+                </div>
+                <p>
+                    Instead of ranking students purely by academic CGPA (which ignores real-world coding ability), the platform uses a composite formula calculated directly in SQL:
+                </p>
+
+                <div class="formula-box">
+                    <span class="highlight">Total Ranking Score</span> = <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;(<span class="highlight">CGPA</span> × 10) <span class="comment">-- Academic consistency (up to 100 pts)</span><br>
+                    &nbsp;&nbsp;+ (<span class="highlight">Verified Skill Badges</span> × 8) <span class="comment">-- Proven technical knowledge</span><br>
+                    &nbsp;&nbsp;+ (<span class="highlight">Job Offers Won</span> × 25) <span class="comment">-- Final placement success</span><br>
+                    &nbsp;&nbsp;+ (<span class="highlight">Shortlists</span> × 10) <span class="comment">-- Interview qualification</span><br>
+                    &nbsp;&nbsp;+ (<span class="highlight">Total Applications</span> × 2) <span class="comment">-- Active career engagement</span><br>
+                    &nbsp;&nbsp;+ (<span class="highlight">College Verified ? 5 : 0</span>) <span class="comment">-- Official university endorsement</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- TAB 4: TECHNICAL ARCHITECTURE & CODE (ENGINEERING DETAILS)      -->
+        <!-- ============================================================== -->
+        <div id="tab-technical" class="hidden">
+            <div class="section-card">
+                <h2><i class="fas fa-microchip"></i> System Architecture &amp; Technology Stack</h2>
+                <div class="section-intro">
+                    Comprehensive engineering overview detailing frameworks, database design, algorithms, and security measures.
+                </div>
+
+                <div class="subheading"><i class="fas fa-layer-group"></i> Architecture Stack</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Technology</th>
+                                <th>Engineering Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Backend Framework</strong></td>
+                                <td>Python 3.11+ / FastAPI / Uvicorn</td>
+                                <td>High-speed asynchronous ASGI server serving REST APIs under <code>/api/*</code> and OpenAPI Swagger docs at <code>/docs</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Frontend Layer</strong></td>
+                                <td>HTML5, CSS3, ES6 JavaScript</td>
+                                <td>Lightweight Glassmorphism UI served directly by FastAPI without Node.js runtime overhead or CORS friction.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Primary Database</strong></td>
+                                <td>PostgreSQL (Supabase)</td>
+                                <td>Relational data model with native UUID keys, ACID transactions, and threaded connection pooling (<code>psycopg2</code>).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cloud File Storage</strong></td>
+                                <td>Supabase Storage (Bucket: <code>resumes</code>)</td>
+                                <td>Secure cloud bucket hosting student resume PDFs with public read policies.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Artificial Intelligence</strong></td>
+                                <td>Google Gemini AI (Pro &amp; Flash)</td>
+                                <td>Dynamic 5-question technical quiz generation, customized 30-day skill gap curriculum creation.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>PDF Text Parser</strong></td>
+                                <td><code>pypdf</code></td>
+                                <td>In-memory stream reader extracting text from student PDF uploads for regex skill matching.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>PDF Doc Generator</strong></td>
+                                <td>ReportLab 5.0</td>
+                                <td>Builds multi-page enterprise system guides and printable student profile cards.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="subheading"><i class="fas fa-database"></i> Database Schema &amp; Tables</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Table Name</th>
+                                <th>Key Columns</th>
+                                <th>Security (RLS)</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>public.users</code></td>
+                                <td><code>id (UUID)</code>, <code>email</code>, <code>password_hash</code>, <code>role</code>, <code>cgpa</code>, <code>verified_skills</code></td>
+                                <td><strong>Enabled</strong> (Service Role)</td>
+                                <td>Stores student and officer credentials. Enforces <code>role IN ('student', 'admin')</code> constraint.</td>
+                            </tr>
+                            <tr>
+                                <td><code>public.skills</code></td>
+                                <td><code>id (BIGSERIAL)</code>, <code>name</code></td>
+                                <td><strong>Enabled</strong> (Public Read)</td>
+                                <td>Master catalog of 160+ industry technologies used for autocomplete and regex resume matching.</td>
+                            </tr>
+                            <tr>
+                                <td><code>public.internships</code></td>
+                                <td><code>id (UUID)</code>, <code>company_name</code>, <code>role_title</code>, <code>required_skills (text[])</code></td>
+                                <td><strong>Enabled</strong> (Public Read)</td>
+                                <td>Active placement and internship listings with deadline tracking and skill arrays.</td>
+                            </tr>
+                            <tr>
+                                <td><code>public.applications</code></td>
+                                <td><code>id (UUID)</code>, <code>user_id</code>, <code>internship_id</code>, <code>status</code>, <code>ai_reason</code></td>
+                                <td><strong>Enabled</strong> (Service Role)</td>
+                                <td>Junction table connecting students to jobs with <code>ON DELETE CASCADE</code> triggers and status tracking.</td>
+                            </tr>
+                            <tr>
+                                <td><code>public.quiz_attempts</code></td>
+                                <td><code>id (UUID)</code>, <code>user_id</code>, <code>skill_name</code>, <code>score</code>, <code>passed</code></td>
+                                <td><strong>Enabled</strong> (Service Role)</td>
+                                <td>Audit history of technical quiz attempts used to verify skills.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="subheading"><i class="fas fa-lock"></i> Security &amp; Data Protection</div>
+                <ul style="margin-left: 20px; color: var(--slate-700); margin-bottom: 20px;">
+                    <li><strong>BCrypt Password Hashing:</strong> Passwords are never stored in plain text. Hashed with 10 salt rounds before database insertion.</li>
+                    <li><strong>Stateless JWT Tokens:</strong> Sessions use HS256 signed JSON Web Tokens containing user ID, email, and role, expiring after 7 days.</li>
+                    <li><strong>SQL Injection Immunity:</strong> All database operations execute through parameterized psycopg2 queries (<code>%s</code> placeholders).</li>
+                    <li><strong>Supabase Row Level Security (RLS):</strong> Enabled across all public tables to prevent unauthorized direct queries through public PostgREST APIs.</li>
+                </ul>
+
+                <div class="subheading"><i class="fas fa-network-wired"></i> Core REST API Endpoints</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Endpoint</th>
+                                <th>Access</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/auth/register</code></td>
+                                <td>Public</td>
+                                <td>Register student account, validate unique email, issue JWT token.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/auth/login</code></td>
+                                <td>Public</td>
+                                <td>Authenticate email &amp; password, issue JWT token and role metadata.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge get">GET</span></td>
+                                <td><code>/api/internships</code></td>
+                                <td>Authenticated</td>
+                                <td>List opportunities; dynamically calculates real-time match ratio if student.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/profile/upload-resume</code></td>
+                                <td>Student</td>
+                                <td>Extracts PDF text, regex-matches master skills, uploads to Supabase storage.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/ai/quiz</code></td>
+                                <td>Authenticated</td>
+                                <td>Generates 5 technical MCQs using Gemini API or offline fallback bank.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/skills/submit</code></td>
+                                <td>Student</td>
+                                <td>Evaluates score; if $\ge 80\%$, awards verified badge in user profile.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/ai/skill-gap</code></td>
+                                <td>Student</td>
+                                <td>Produces 30-day curriculum with YouTube tutorial references for missing skills.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge post">POST</span></td>
+                                <td><code>/api/applications</code></td>
+                                <td>Student</td>
+                                <td>Submits 1-click job application. Prevents duplicate submissions.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge get">GET</span></td>
+                                <td><code>/api/admin/rankings</code></td>
+                                <td>Admin Only</td>
+                                <td>Executes composite SQL ranking formula across all students.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="pill-badge put">PUT</span></td>
+                                <td><code>/api/applications/{id}/status</code></td>
+                                <td>Admin Only</td>
+                                <td>Updates status (Shortlisted/Offered/Rejected) and saves written feedback.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- TAB 5: SETUP, LAUNCH & FAQ                                      -->
+        <!-- ============================================================== -->
+        <div id="tab-setup" class="hidden">
+            <div class="section-card">
+                <h2><i class="fas fa-rocket"></i> Setup, Execution &amp; Client FAQ</h2>
+                <div class="section-intro">
+                    Instructions for zero-friction launch on any machine and answers to common client questions.
+                </div>
+
+                <div class="subheading"><i class="fas fa-play"></i> Running the Project (Fastest Method)</div>
+
+                <div class="comparison-grid">
+                    <div class="comp-card" style="background: var(--slate-50);">
+                        <h3><i class="fab fa-windows" style="color: #0284c7;"></i> Windows One-Click (run.bat)</h3>
+                        <p style="font-size: 0.95rem;">Simply double-click <strong><code>run.bat</code></strong> in the root folder. It handles everything automatically:</p>
+                        <ol style="margin-left: 20px; font-size: 0.9rem; color: var(--slate-700);">
+                            <li>Checks if Python 3.9+ is installed (downloads &amp; installs it silently if missing).</li>
+                            <li>Creates an isolated virtual environment (<code>.venv</code>).</li>
+                            <li>Installs all required dependencies from <code>backend/requirements.txt</code>.</li>
+                            <li>Bootstraps database tables, default admin, and master skills automatically.</li>
+                            <li>Automatically opens your web browser to <code>http://localhost:3000/index.html</code>.</li>
+                        </ol>
+                    </div>
+
+                    <div class="comp-card" style="background: var(--slate-50);">
+                        <h3><i class="fab fa-apple" style="color: #475569;"></i> macOS / Linux (run.sh)</h3>
+                        <p style="font-size: 0.95rem;">Open your terminal in the root folder and run:</p>
+                        <pre><code>chmod +x run.sh
+./run.sh</code></pre>
+                        <p style="font-size: 0.9rem; color: var(--slate-600); margin-top: 8px;">
+                            Or use Docker with zero host dependencies:
+                        </p>
+                        <pre><code>docker compose up --build</code></pre>
+                    </div>
+                </div>
+
+                <div class="subheading"><i class="fas fa-key"></i> Default Access Credentials</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Login URL</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>College Placement Officer (Admin)</strong></td>
+                                <td><code>http://localhost:3000/admin.html</code></td>
+                                <td><code>admin@placementtracker.com</code></td>
+                                <td><code>Admin@123</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Student Account</strong></td>
+                                <td><code>http://localhost:3000/register.html</code></td>
+                                <td>Any student email</td>
+                                <td>Set during registration</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="subheading"><i class="fas fa-database"></i> Setting up Supabase from Scratch (Step-by-Step)</div>
+                <p style="margin-bottom: 16px;">If you or your client are launching on a brand new laptop with a fresh Supabase account, follow these 4 simple steps:</p>
+                <ol class="step-list">
+                    <li class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-title">Create a Free Project on Supabase</div>
+                        <div class="step-desc">
+                            Go to <a href="https://supabase.com" target="_blank" style="color: var(--brand-600); font-weight: 600;">supabase.com</a>, sign up or log in, and click <strong>New Project</strong>. Choose a project name (e.g. <code>placement-tracker</code>), set a secure Database Password (make sure to write this down!), and select your nearest region.
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-title">Get Connection String &amp; API Keys</div>
+                        <div class="step-desc">
+                            <ul style="margin-top: 6px;">
+                                <li><strong>Database URI:</strong> Go to <em>Project Settings (⚙️) &rarr; Database &rarr; Connection string (URI tab)</em>. Copy the URI and replace <code>[YOUR-PASSWORD]</code> with your password.</li>
+                                <li><strong>API Credentials:</strong> Go to <em>Project Settings (⚙️) &rarr; API</em>. Copy your <strong>Project URL</strong> and <strong>anon key</strong>.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-title">Create the "resumes" Storage Bucket</div>
+                        <div class="step-desc">
+                            In the left sidebar, click <strong>Storage (📁) &rarr; New bucket</strong>. Name the bucket exactly <code>resumes</code> and toggle <strong>Public bucket: ON</strong>. This allows seamless student PDF resume uploads and recruiter downloads.
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-title">Run the Project (Automatic Table &amp; Skill Bootstrapping)</div>
+                        <div class="step-desc">
+                            Paste the credentials into <code>.env</code> and double-click <strong><code>run.bat</code></strong>. You don't even need to write SQL queries—the backend's self-bootstrapper connects automatically, builds all 6 tables, seeds 160+ master skills, creates the default admin, and populates sample company listings!
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="subheading"><i class="fas fa-circle-question"></i> Frequently Asked Questions (Client FAQ)</div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Q1: What happens if the client inserts a brand new, empty Supabase database into .env?</span>
+                    </div>
+                    <div class="faq-answer">
+                        The application has an <strong>Automatic Self-Bootstrapper</strong> (<code>init_db.py</code>). On startup, it detects if the database is fresh, automatically runs <code>supabase_setup.sql</code> to create all tables and indexes, seeds 160+ master skills, creates the default administrator, and seeds 5 initial internship listings (Google, Microsoft, Amazon, Meta, TCS). Zero manual SQL required.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Q2: What happens if Google Gemini AI key is offline or expires?</span>
+                    </div>
+                    <div class="faq-answer">
+                        The system has a built-in <strong>Emergency Offline Fallback Engine</strong>. It includes curated question banks for 15+ major technologies (Python, Java, React, SQL, Docker, C++, etc.). If the Gemini API key fails or has zero quota, quizzes continue to work seamlessly without crashing.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Q3: What if someone uploads a scanned image PDF instead of a text PDF?</span>
+                    </div>
+                    <div class="faq-answer">
+                        The <code>pypdf</code> text extraction engine parses standard PDF text layers. For scanned PDFs (which are raw images), it safely uploads the resume to Supabase Storage and informs the student to select or confirm their skills manually if text cannot be extracted, ensuring zero crashes.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Q4: How do we deploy this to production (cloud hosting)?</span>
+                    </div>
+                    <div class="faq-answer">
+                        You can push the repository to GitHub and deploy to <strong>Render.com</strong> or <strong>Railway.app</strong> in under 3 minutes:
+                        <br>• <strong>Build Command:</strong> <code>pip install -r backend/requirements.txt</code>
+                        <br>• <strong>Start Command:</strong> <code>python backend/run.py</code>
+                        <br>• The static frontend auto-detects the production domain dynamically, requiring zero URL code changes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab panels
+            ['overview', 'student', 'admin', 'technical', 'setup'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Remove active state from all buttons
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            // Show selected panel and highlight button
+            const target = document.getElementById('tab-' + tabId);
+            if (target) {
+                target.classList.remove('hidden');
+                // Scroll smoothly to top of tabs
+                window.scrollTo({ top: 380, behavior: 'smooth' });
+            }
+
+            // Find matching button
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+                b.getAttribute('onclick') && b.getAttribute('onclick').includes(tabId)
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
