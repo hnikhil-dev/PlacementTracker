@@ -101,7 +101,7 @@ document.getElementById('postJobForm').addEventListener('submit', async (e) => {
             toast(`"${role_title}" at ${company_name} posted successfully!`, 'success');
             document.getElementById('postJobForm').reset();
         } else {
-            toast('Error: ' + (data.error || data.message || 'Failed to post'), 'error');
+            toast('Error: ' + getErrorMessage(data, 'Failed to post'), 'error');
         }
     } catch (err) {
         console.error(err);
@@ -277,7 +277,7 @@ async function updateStatus(appId, newStatus, reason) {
             loadAllApplications();
         } else {
             const d = await safeJson(res);
-            toast('Failed: ' + (d.error || d.message), 'error');
+            toast('Failed: ' + getErrorMessage(d, 'Status update failed'), 'error');
         }
     } catch (err) {
         console.error(err);
@@ -436,7 +436,7 @@ async function toggleCollegeVerify(studentId, verified) {
             loadStudents();
         } else {
             const d = await safeJson(res);
-            toast('Failed: ' + (d.message || d.error), 'error');
+            toast('Failed: ' + getErrorMessage(d, 'Verification update failed'), 'error');
         }
     } catch (err) {
         toast('Server error.', 'error');
@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     toast('Application created successfully!', 'success');
                     applyForm.reset();
                 } else {
-                    toast('Error: ' + (data.message || data.error || 'Failed'), 'error');
+                    toast('Error: ' + getErrorMessage(data, 'Failed to submit application'), 'error');
                 }
             } catch (err) {
                 toast('Network error. Please try again.', 'error');
