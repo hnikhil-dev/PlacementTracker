@@ -1,4 +1,4 @@
-// ==========================================
+﻿// ==========================================
 // PLACEMENT TRACKER DASHBOARD CONTROLLER - NEXT LEVEL
 // ==========================================
 
@@ -714,7 +714,7 @@ async function uploadResume() {
                 </div>`;
             showToast(`Resume parsed! ${skillCount} skills found.`, 'success');
         } else {
-            uploadStatus.innerHTML = `<p style="color:#ef4444;"><i class="fas fa-exclamation-circle"></i> ${escapeHtml(data.message || 'Upload failed.')}</p>`;
+            uploadStatus.innerHTML = `<p style="color:#ef4444;"><i class="fas fa-exclamation-circle"></i> ${escapeHtml(getErrorMessage(data, 'Upload failed.'))}</p>`;
             showToast(getErrorMessage(data, 'Resume upload failed.'), 'error');
         }
     } catch (err) {
