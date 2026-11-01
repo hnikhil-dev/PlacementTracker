@@ -1,7 +1,7 @@
-// Auto-detects the base URL so the app works both locally and on Vercel
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? `http://localhost:${window.location.port || 3000}/api`
-    : `${window.location.origin}/api`;
+// Auto-detects the base URL so the app works both locally, over LAN, and when deployed
+const API_BASE_URL = (typeof window !== 'undefined' && window.location && window.location.origin)
+    ? `${window.location.origin}/api`
+    : 'http://localhost:3000/api';
 
 /**
  * Safely parse JSON from a fetch Response.
@@ -22,6 +22,27 @@ async function safeJson(response, fallback = {}) {
         console.warn('safeJson: Could not parse response as JSON:', e.message);
         return fallback;
     }
+}
+
+/**
+ * Extracts a user-friendly error message from API responses across
+ * FastAPI (detail), standard REST (message, error), and validation error lists.
+ */
+function getErrorMessage(data, fallback = 'Operation failed') {
+    if (!data) return fallback;
+    if (typeof data === 'string') return data;
+    if (data.detail) {
+        if (typeof data.detail === 'string') return data.detail;
+        if (Array.isArray(data.detail) && data.detail.length > 0) {
+            return data.detail.map(d => d.msg || (typeof d === 'string' ? d : JSON.stringify(d))).join(', ');
+        }
+    }
+    if (data.message && typeof data.message === 'string') return data.message;
+    if (data.error && typeof data.error === 'string') return data.error;
+    if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+        return data.errors[0].msg || data.errors[0].message || JSON.stringify(data.errors[0]);
+    }
+    return fallback;
 }
 
 // Helper function to handle fetch with Auth Token automatically
@@ -57,4 +78,4 @@ async function authenticatedFetch(url, options = {}) {
     }
 
     return response;
-}
+}

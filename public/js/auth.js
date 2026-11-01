@@ -31,7 +31,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
             window.location.href = data.user.role === 'admin' ? 'admin.html' : 'dashboard.html';
         } else {
             // Server Error
-            throw new Error(data.error || 'Login failed');
+            throw new Error(getErrorMessage(data, 'Login failed. Please check your credentials.'));
         }
     } catch (err) {
         // Handle Network or Server Errors
@@ -68,17 +68,10 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
             alert("Registration Successful! Please login.");
             window.location.href = 'index.html';
         } else {
-            // Parse Error (could be array or string)
-            let message = 'Registration failed';
-            if (data.errors && Array.isArray(data.errors)) {
-                message = data.errors[0].msg;
-            } else if (data.error) {
-                message = data.error;
-            }
-            throw new Error(message);
+            throw new Error(getErrorMessage(data, 'Registration failed. Please check your details.'));
         }
     } catch (err) {
-        showError(err.message, btnText, loader, errorMsg, 'Sign Up');
+        showError(err.message, btnText, loader, errorMsg, 'Create Account');
     }
 });
 

@@ -86,14 +86,12 @@ async def upload_resume(
     extracted_lower = [s.lower() for s in extracted_skills]
     cleaned_verified = [v for v in existing_verified if v.lower() in extracted_lower]
 
-    skills_json_str = json.dumps(extracted_skills)
-
     with get_db() as cur:
         cur.execute("""
             UPDATE public.users 
             SET resume_link = %s, skills = %s, verified_skills = %s
             WHERE id = %s;
-        """, (public_url, skills_json_str, cleaned_verified, str(current_user["id"])))
+        """, (public_url, extracted_skills, cleaned_verified, str(current_user["id"])))
 
         # Find top 5 recommended jobs
         cur.execute("""

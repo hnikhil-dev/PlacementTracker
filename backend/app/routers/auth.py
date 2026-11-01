@@ -56,9 +56,9 @@ def register(req: RegisterRequest):
 
         cur.execute("""
             INSERT INTO public.users (id, full_name, email, password_hash, role, created_at, skills, verified_skills)
-            VALUES (%s, %s, %s, %s, %s, %s, '[]', '{}')
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id, full_name, email, role;
-        """, (str(new_id), req.full_name.strip(), email_clean, hashed, normalized_role, now))
+        """, (str(new_id), req.full_name.strip(), email_clean, hashed, normalized_role, now, [], []))
         new_user = cur.fetchone()
 
     token = create_access_token(new_user["id"], new_user["email"], new_user["role"])

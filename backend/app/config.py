@@ -23,10 +23,10 @@ if not env_loaded:
 
 # Database Configuration
 RAW_DB_URL = os.getenv("DATABASE_URL", "").strip('"').strip("'")
-DB_HOST = os.getenv("DB_HOST", "aws-1-ap-south-1.pooler.supabase.com")
+DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "postgres")
-DB_USER = os.getenv("DB_USER", "postgres.ftiibvtqebzlgfgdehbs")
+DB_USER = os.getenv("DB_USER", "postgres")
 DB_PASS = os.getenv("DB_PASS", "")
 
 if RAW_DB_URL and RAW_DB_URL.startswith("postgresql://"):
