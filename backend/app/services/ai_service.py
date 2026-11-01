@@ -60,6 +60,9 @@ def call_gemini(prompt: str) -> str | None:
                         return text
             else:
                 logger.warning("Gemini model %s returned status %s: %s", model, resp.status_code, resp.text)
+                if resp.status_code in (400, 401, 403) and ("API_KEY_INVALID" in resp.text or "PERMISSION_DENIED" in resp.text):
+                    logger.warning("Gemini API key is invalid/unauthorized. Bypassing model retries and using offline fallback.")
+                    break
         except Exception as e:
             logger.warning("Gemini model %s call failed: %s", model, e)
 
