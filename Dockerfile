@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 COPY backend/ ./backend/
 COPY public/ ./public/
 COPY supabase_setup.sql .
-COPY .env* ./
+COPY .env.example .env.example
 
 EXPOSE 8080
 
